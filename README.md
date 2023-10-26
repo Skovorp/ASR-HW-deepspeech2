@@ -2,11 +2,27 @@
 
 ## Installation guide
 
-< Write your installation guide here >
+- install requirements
+- install model + vocab from librispeech
+- install 
 
 ```shell
 pip install -r ./requirements.txt
+# download model (3-gram.pruned.3e-7.arpa) and vocabulary (librispeech-vocab.txt) from here https://www.openslr.org/11/
+wget https://www.openslr.org/resources/11/3-gram.pruned.3e-7.arpa.gz
+wget https://www.openslr.org/resources/11/librispeech-vocab.txt
+# the add paths to them to config, check configs/for_testing.json
+
+# load checkpoints from google drive. now you can link them
+pip install gdown
+gdown https://drive.google.com/drive/folders/1OW__4Bd8HzeFildGCimCCctqksv0GeK3 --folder
 ```
+to run train use config real_training.json
+for testing use config for_testing.json
+
+I've implemented LM beamsearch and added tests for it and for regular beamsearch also. I've commented test 
+for LM as it has hardcoded paths.
+
 
 ## Recommended implementation order
 

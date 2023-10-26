@@ -43,16 +43,16 @@ class TestTextEncoder(unittest.TestCase):
         self.assertEqual(res[1].text, 'ba')
         self.assertEqual(res[2].text, 'a') # this is argmax result
 
-    def test_lm_beam_search(self):
-        text_encoder = CTCCharTextEncoder(alphabet=None, 
-            lm_path="/home/ubuntu/asr_project_template/3-gram.pruned.3e-7.arpa", 
-            lm_vocab_path='/home/ubuntu/asr_project_template/librispeech-vocab.txt')
+    # def test_lm_beam_search(self):
+    #     text_encoder = CTCCharTextEncoder(alphabet=None, 
+    #         lm_path="/home/ubuntu/asr_project_template/3-gram.pruned.3e-7.arpa", 
+    #         lm_vocab_path='/home/ubuntu/asr_project_template/librispeech-vocab.txt')
 
-        test_tensor = torch.rand(50, 28)
-        test_tensor = torch.softmax(test_tensor, 1)
-        assert ((test_tensor.sum(1) - 1) == 0).all
+    #     test_tensor = torch.rand(50, 28)
+    #     test_tensor = torch.softmax(test_tensor, 1)
+    #     assert ((test_tensor.sum(1) - 1) == 0).all
 
-        prob_len = 45
-        res = text_encoder.lm_beam_search(test_tensor, prob_len)
+    #     prob_len = 45
+    #     res = text_encoder.lm_beam_search(test_tensor, prob_len)
         
         
