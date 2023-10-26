@@ -3,6 +3,7 @@ from typing import List
 import torch.nn.functional as F
 import torch
 logger = logging.getLogger(__name__)
+import random
 
 
 def collate_fn(dataset_items: List[dict]):
@@ -42,6 +43,7 @@ def collate_fn(dataset_items: List[dict]):
         outp['text_encoded_length'].append(el['text_encoded'].shape[1])
         outp['spectrogram_length'].append(el['spectrogram'].shape[2])
         outp['audio_path'].append(el['audio_path'])
+    outp['audio_example'] = random.choice(dataset_items)['audio'].cpu()
 
     
     outp['spectrogram'] = torch.cat(outp['spectrogram'], 0)

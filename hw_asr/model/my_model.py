@@ -19,7 +19,7 @@ class CustomRecurrentLayer(nn.Module):
     def __init__(self, features, gru_hidden_size):
         super().__init__()
         self.norm = nn.BatchNorm1d(gru_hidden_size * 2)
-        self.gru = nn.GRU(features, gru_hidden_size, batch_first=True, dropout=0.1, bidirectional=True)
+        self.gru = nn.GRU(features, gru_hidden_size, batch_first=True, dropout=0.2, bidirectional=True)
 
     def forward(self, x):
         outp, _ = self.gru(x)
