@@ -4,7 +4,7 @@
 
 - install requirements
 - install model + vocab from librispeech
-- install 
+- load checkpoints 
 
 ```shell
 pip install -r ./requirements.txt
