@@ -1,6 +1,6 @@
 torch==1.11.0
 torchvision==0.12.0
-numpy
+numpy==1.22.4
 tqdm
 tensorboard
 matplotlib
@@ -14,3 +14,5 @@ wandb
 pyctcdecode
 torchaudio~=0.11.0
 pillow
+jiwer
+pypi-kenlm

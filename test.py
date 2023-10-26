@@ -11,6 +11,7 @@ from hw_asr.trainer import Trainer
 from hw_asr.utils import ROOT_PATH
 from hw_asr.utils.object_loading import get_dataloaders
 from hw_asr.utils.parse_config import ConfigParser
+from hw_asr.metric.utils import calc_cer, calc_wer
 
 DEFAULT_CHECKPOINT_PATH = ROOT_PATH / "default_test_model" / "checkpoint.pth"
 
@@ -20,6 +21,8 @@ def main(config, out_file):
 
     # define cpu or gpu if possible
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if config['n_gpu'] == 0:
+        device = torch.device("cpu")
 
     # text_encoder
     text_encoder = config.get_text_encoder()
@@ -45,6 +48,12 @@ def main(config, out_file):
     results = []
 
     with torch.no_grad():
+        wer_argmax = []
+        cer_argmax = []
+        wer_bs = []
+        cer_bs = []
+        wer_lm_bs = []
+        cer_lm_bs = []
         for batch_num, batch in enumerate(tqdm(dataloaders["test"])):
             batch = Trainer.move_batch_to_device(batch, device)
             output = model(**batch)
@@ -68,8 +77,29 @@ def main(config, out_file):
                         "pred_text_beam_search": text_encoder.ctc_beam_search(
                             batch["probs"][i], batch["log_probs_length"][i], beam_size=100
                         )[:10],
+                        "pred_text_lm_beam_search": text_encoder.lm_beam_search(
+                             batch["probs"][i], batch["log_probs_length"][i], beam_size=100
+                        )
                     }
                 )
+                wer_argmax.append(calc_wer(results[-1]['ground_trurh'], results[-1]['pred_text_argmax']))
+                cer_argmax.append(calc_cer(results[-1]['ground_trurh'], results[-1]['pred_text_argmax']))
+                wer_bs.append(calc_wer(results[-1]['ground_trurh'], results[-1]['pred_text_beam_search'][0][0]))
+                cer_bs.append(calc_cer(results[-1]['ground_trurh'], results[-1]['pred_text_beam_search'][0][0]))
+                wer_lm_bs.append(calc_wer(results[-1]['ground_trurh'], results[-1]['pred_text_lm_beam_search'][0]))
+                cer_lm_bs.append(calc_cer(results[-1]['ground_trurh'], results[-1]['pred_text_lm_beam_search'][0]))
+    results = {
+        'metrics': {
+            'wer_argmax': torch.mean(torch.tensor(wer_argmax)).item(),
+            'cer_argmax': torch.mean(torch.tensor(cer_argmax)).item(),
+            'wer_bs': torch.mean(torch.tensor(wer_bs)).item(),
+            'cer_bs': torch.mean(torch.tensor(cer_bs)).item(),
+            'wer_lm_bs': torch.mean(torch.tensor(wer_lm_bs)).item(),
+            'cer_lm_bs': torch.mean(torch.tensor(cer_lm_bs)).item(),
+        },
+        'results': results
+    }
+    print(results['metrics'])
     with Path(out_file).open("w") as f:
         json.dump(results, f, indent=2)
 
@@ -121,7 +151,7 @@ if __name__ == "__main__":
     args.add_argument(
         "-j",
         "--jobs",
-        default=1,
+        default=4,
         type=int,
         help="Number of workers for test dataloader",
     )
@@ -135,6 +165,7 @@ if __name__ == "__main__":
     # first, we need to obtain config with model parameters
     # we assume it is located with checkpoint in the same folder
     model_config = Path(args.resume).parent / "config.json"
+    # if args.config is None:
     with model_config.open() as f:
         config = ConfigParser(json.load(f), resume=args.resume)
 

@@ -1,0 +1,47 @@
+{
+  "name": "for_testing",
+  "n_gpu": 1,
+  "preprocessing": {
+    "sr": 16000,
+    "spectrogram": {
+      "type": "MelSpectrogram",
+      "args": {
+      }
+    },
+    "log_spec": true
+  },
+  "augmentations": {
+    "wave": [],
+    "spectrogram": []
+  },
+  "text_encoder": {
+    "type": "CTCCharTextEncoder",
+    "args": {
+      "lm_path": "/home/ubuntu/asr_project_template/3-gram.pruned.3e-7.arpa", 
+      "lm_vocab_path": "/home/ubuntu/asr_project_template/librispeech-vocab.txt"
+    }
+  },
+  "arch": {
+    "type": "MyModel",
+    "args": {
+      "n_feats": 128,
+      "recurrent_layers": 5,
+      "gru_hidden_size": 1000
+    }
+  },
+
+  "data": {
+    "test": {
+      "batch_size": 20,
+      "num_workers": 4, 
+      "datasets": [
+        {
+          "type": "LibrispeechDataset",
+          "args": {
+            "part": "test-other"
+          }
+        }
+      ]
+    }
+  }
+}

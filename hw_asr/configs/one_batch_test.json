@@ -15,10 +15,10 @@
     "spectrogram": []
   },
   "arch": {
-    "type": "BaselineModel",
+    "type": "MyModel",
     "args": {
       "n_feats": 128,
-      "fc_hidden": 512
+      "gru_hidden_size": 800
     }
   },
   "data": {
@@ -54,9 +54,9 @@
     }
   },
   "optimizer": {
-    "type": "SGD",
+    "type": "Adam",
     "args": {
-      "lr": 1e-2
+      "lr": 3e-4
     }
   },
   "loss": {
@@ -95,7 +95,7 @@
     "monitor": "min val_loss",
     "early_stop": 100,
     "visualize": "wandb",
-    "wandb_project": "asr_project",
+    "wandb_project": "dla_asr",
     "len_epoch": 100,
     "grad_norm_clip": 10
   }

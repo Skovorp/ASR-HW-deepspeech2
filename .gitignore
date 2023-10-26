@@ -110,3 +110,8 @@ wandb/
 .vscode/
 .idea/
 __MACOSX/
+
+
+# models for beamsearch
+*.arpa
+*-vocab.txt

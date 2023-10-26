@@ -13,11 +13,11 @@ pip install -r ./requirements.txt
 You might be a little intimidated by the number of folders and classes. Try to follow this steps to gradually undestand
 the workflow.
 
-1) Test `hw_asr/tests/test_dataset.py`  and `hw_asr/tests/test_config.py` and make sure everythin works for you
-2) Implement missing functions to fix tests in  `hw_asr\tests\test_text_encoder.py`
-3) Implement missing functions to fix tests in  `hw_asr\tests\test_dataloader.py`
-4) Implement functions in `hw_asr\metric\utils.py`
-5) Implement missing function to run `train.py` with a baseline model
+1) ✅ Test `hw_asr/tests/test_dataset.py`  and `hw_asr/tests/test_config.py` and make sure everythin works for you
+2) ✅ Implement missing functions to fix tests in  `hw_asr/tests/test_text_encoder.py`
+3) ✅ Implement missing functions to fix tests in  `hw_asr/tests/test_dataloader.py`
+4) (Write it yourself) ✅ Implement functions in `hw_asr\metric\utils.py`
+5) ✅ Implement missing function to run `train.py` with a baseline model
 6) Write your own model and try to overfit it on a single batch
 7) Implement ctc beam search and add metrics to calculate WER and CER over hypothesis obtained from beam search.
 8) ~~Pain and suffering~~ Implement your own models and train them. You've mastered this template when you can tune your
